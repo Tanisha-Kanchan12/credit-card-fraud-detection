@@ -1,75 +1,54 @@
 import streamlit as st
-import numpy as np
 import pickle
+import numpy as np
 
-# ---------------- Page Config ----------------
+# ------------------ Page Config ------------------
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
     page_icon="💳",
     layout="centered"
 )
 
-# ---------------- Load Model ----------------
-@st.cache_resource
-def load_model():
-    with open("fraud_model.pkl", "rb") as f:
-        return pickle.load(f)
+# ------------------ Load Model ------------------
+with open("fraud_model.pkl", "rb") as file:
+    model = pickle.load(file)
 
-model = load_model()
-
-# ---------------- UI ----------------
+# ------------------ UI ------------------
 st.title("💳 Credit Card Fraud Detection System")
 
-st.markdown(
-"""
-This system simulates how **banks detect suspicious credit card transactions**
-in real time using Machine Learning.
-
-The transaction details shown below are **internally processed risk signals**
-and are not visible to customers in real banking systems.
-"""
+st.write(
+    "This application demonstrates how a Machine Learning model can "
+    "identify potentially fraudulent credit card transactions."
 )
 
 st.divider()
-st.subheader("🧾 Transaction Risk Parameters")
 
-# ---------------- Generate Inputs ----------------
-# Model expects SAME number of features it was trained on
-n_features = model.coef_.shape[1]
+st.subheader("🔍 Fraud Detection Demo")
 
-inputs = []
-for i in range(n_features):
-    value = st.number_input(
-        f"Feature {i+1}",
-        value=0.0,
-        step=0.01
-    )
-    inputs.append(value)
+st.write(
+    "For demonstration purposes, the model evaluates a **simulated transaction** "
+    "using anonymized numerical features."
+)
 
-# ---------------- Prediction ----------------
-if st.button("🔍 Analyze Transaction"):
-    X = np.array(inputs).reshape(1, -1)
+# ------------------ Button ------------------
+if st.button("🚀 Check Transaction Risk"):
+    
+    # Random dummy input (same shape as training features)
+    input_data = np.random.normal(0, 1, (1, model.coef_.shape[1]))
+    
+    prediction = model.predict(input_data)[0]
+    probability = model.predict_proba(input_data)[0][1]
 
-    prediction = model.predict(X)[0]
-    probability = model.predict_proba(X)[0][1]
-
-    st.divider()
-    st.subheader("🔎 Risk Assessment Result")
+    st.subheader("📊 Model Prediction")
 
     if prediction == 1:
-        st.error(
-            f"⚠️ High Risk Transaction Detected\n\n"
-            f"Fraud Probability: **{probability:.2f}**"
-        )
+        st.error(f"⚠️ Fraud Detected\n\nRisk Probability: {probability:.2f}")
     else:
-        st.success(
-            f"✅ Transaction Approved\n\n"
-            f"Fraud Probability: **{probability:.2f}**"
-        )
+        st.success(f"✅ Transaction is Normal\n\nRisk Probability: {probability:.2f}")
 
-# ---------------- Footer ----------------
 st.divider()
-st.caption(
-    "Disclaimer: This application is a simulation built for academic and learning purposes."
-)
 
+st.caption(
+    "⚠️ Disclaimer: This is a demonstration project created for learning purposes. "
+    "All data used is anonymized and does not represent real customer information."
+)
