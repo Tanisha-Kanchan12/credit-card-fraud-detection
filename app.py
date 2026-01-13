@@ -2,44 +2,55 @@ import streamlit as st
 import pickle
 import numpy as np
 
-# ------------------ Page Config ------------------
+# ---------------- Page Config ----------------
 st.set_page_config(
     page_title="Credit Card Fraud Detection",
     page_icon="💳",
     layout="centered"
 )
 
-# ------------------ Load Model ------------------
+# ---------------- Load Model ----------------
 with open("fraud_model.pkl", "rb") as file:
     model = pickle.load(file)
 
-# ------------------ UI ------------------
+# ---------------- UI ----------------
 st.title("💳 Credit Card Fraud Detection System")
 
 st.write(
-    "This application demonstrates how a Machine Learning model can "
-    "identify potentially fraudulent credit card transactions."
+    "This application demonstrates how a Machine Learning model evaluates "
+    "credit card transactions and flags potentially fraudulent activity."
 )
 
 st.divider()
 
-st.subheader("🔍 Fraud Detection Demo")
+st.subheader("🔍 Transaction Risk Analysis")
 
 st.write(
-    "For demonstration purposes, the model evaluates a **simulated transaction** "
-    "using anonymized numerical features."
+    "The model internally uses anonymized numerical features derived from "
+    "transaction behavior. Below is a **summary view** similar to what "
+    "risk analysts see in real systems."
 )
 
-# ------------------ Button ------------------
-if st.button("🚀 Check Transaction Risk"):
-    
-    # Random dummy input (same shape as training features)
+# ---------------- Button ----------------
+if st.button("🚀 Analyze Transaction"):
+
+    # Simulated transaction (same feature count as training data)
     input_data = np.random.normal(0, 1, (1, model.coef_.shape[1]))
-    
+
     prediction = model.predict(input_data)[0]
     probability = model.predict_proba(input_data)[0][1]
 
-    st.subheader("📊 Model Prediction")
+    # Fake but realistic metadata for display
+    amount = np.random.uniform(10, 5000)
+    time_sec = np.random.randint(0, 172800)
+
+    st.subheader("📄 Transaction Summary")
+
+    col1, col2 = st.columns(2)
+    col1.metric("Transaction Amount (₹)", f"{amount:.2f}")
+    col2.metric("Transaction Time (sec)", time_sec)
+
+    st.subheader("📊 Model Decision")
 
     if prediction == 1:
         st.error(f"⚠️ Fraud Detected\n\nRisk Probability: {probability:.2f}")
@@ -50,5 +61,6 @@ st.divider()
 
 st.caption(
     "⚠️ Disclaimer: This is a demonstration project created for learning purposes. "
-    "All data used is anonymized and does not represent real customer information."
+    "The original dataset contains confidential, anonymized features which are "
+    "not exposed in the user interface."
 )
