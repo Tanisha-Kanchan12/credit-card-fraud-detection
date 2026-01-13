@@ -1,3 +1,11 @@
+# Live Web Application
+
+https://credit-card-fraud-detection-v7c2zdcktnksnpkvrepkh6.streamlit.app/
+
+Note:
+This web application is created only for demonstration and learning purposes.
+Due to the confidential and sensitive nature of real credit card transaction data, the app uses simulated inputs to showcase how a fraud detection system works in practice.
+
 #  Credit Card Fraud Detection System
 
 This is a Machine Learning project where I built a model to detect
@@ -44,8 +52,6 @@ The dataset contains credit card transactions made by European cardholders.
 - `Class`:
   - `0` → Normal transaction  
   - `1` → Fraud transaction  
-
-Due to confidentiality, original feature details are not available.
 
 
 ## Exploratory Data Analysis (EDA)
@@ -94,8 +100,6 @@ A demo web application was built using **Streamlit**.
 - Displays:
   - Fraud prediction
   - Fraud probability
-
-This demonstrates the complete ML pipeline from training to deployment.
 
 
 ## Project Structure
